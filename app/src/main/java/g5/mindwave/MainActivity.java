@@ -67,7 +67,7 @@ public class MainActivity extends ActionBarActivity {
                 progressMeditation.setProgress(msg.arg1);
                 break;
             case TGDevice.MSG_RAW_DATA:
-                int rawValue = msg.arg1;
+               // int rawValue = msg.arg1;
                // Log.v("HelloEEG", "Raw Data: "+ rawValue);
                 break;
             case TGDevice.MSG_EEG_POWER:
