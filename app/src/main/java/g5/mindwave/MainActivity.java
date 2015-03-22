@@ -1,6 +1,7 @@
 package g5.mindwave;
 
 import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -8,6 +9,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ProgressBar;
 
 import com.neurosky.thinkgear.TGDevice;
@@ -33,7 +35,10 @@ public class MainActivity extends ActionBarActivity {
         Log.v("Device",""+tgDevice.getState());
         }
     }
-
+    public void sendMessage(View view) {
+        Intent intent = new Intent(this, GameActivity.class);
+        startActivity(intent);
+    }
     private final Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) { switch (msg.what) {

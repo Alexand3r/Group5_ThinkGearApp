@@ -52,4 +52,14 @@
         android:layout_above="@+id/progressBar2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Launch Game"
+        android:id="@+id/btn_launch"
+        android:layout_above="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:onClick="sendMessage" />
 </RelativeLayout>
