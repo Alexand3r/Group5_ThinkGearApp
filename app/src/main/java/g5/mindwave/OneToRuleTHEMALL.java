@@ -1,12 +1,16 @@
 package g5.mindwave;
 
 import android.bluetooth.BluetoothAdapter;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.neurosky.thinkgear.TGDevice;
 import com.neurosky.thinkgear.TGEegPower;
 
@@ -20,8 +24,12 @@ import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.LoopEntityModifier;
 import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
+import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.util.FPSLogger;
+import org.andengine.extension.physics.box2d.PhysicsFactory;
+import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.bitmap.BitmapTexture;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -42,14 +50,19 @@ public class OneToRuleTHEMALL extends SimpleBaseGameActivity{
     TGDevice tgDevice;
     BluetoothAdapter btAdapter;
     Camera camera;
+    Scene scene;
     Sprite carSprite;
     Sprite wheelSprite1;
     Sprite wheelSprite2;
     PhysicsHandler carphysicsHandler;
+
+    private PhysicsWorld mPhysicsWorld;
+
     private static int CAMERA_WIDTH = 800;
     private static int CAMERA_HEIGHT = 480;
+    private static final FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(1, 0.5f, 0.5f);
     int x=0;
-    int y=0;
+
     private ITextureRegion mBackgroundTextureRegion,mCarTextureRegion,mWheel1,mWheel2;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +106,15 @@ public class OneToRuleTHEMALL extends SimpleBaseGameActivity{
 
     @Override
      public  Scene onCreateScene() {
-        final Scene scene = new Scene();
+        this.mEngine.registerUpdateHandler(new FPSLogger());
+        scene = new Scene();
+
+        this.mPhysicsWorld = new PhysicsWorld(new Vector2(0, SensorManager.GRAVITY_EARTH), false);
+        final Rectangle ground = new Rectangle(0, CAMERA_HEIGHT - 2, CAMERA_WIDTH, 2, getVertexBufferObjectManager());
+        final FixtureDef wallFixtureDef = PhysicsFactory.createFixtureDef(0, 0.5f, 0.5f);
+        PhysicsFactory.createBoxBody(this.mPhysicsWorld, ground, BodyDef.BodyType.StaticBody, wallFixtureDef);
+        scene.attachChild(ground);
+
         Sprite backgroundSprite = new Sprite(400,240, this.mBackgroundTextureRegion,getVertexBufferObjectManager());
         scene.attachChild(backgroundSprite);
         carSprite = new Sprite(200,100, this.mCarTextureRegion,getVertexBufferObjectManager());
@@ -187,7 +208,8 @@ public class OneToRuleTHEMALL extends SimpleBaseGameActivity{
     }
     private final Handler handler = new Handler() {
         @Override
-        public void handleMessage(Message msg) { switch (msg.what) {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
             case TGDevice.MSG_STATE_CHANGE:
                 Log.v("HelloEEG","State changed");
                 switch (msg.arg1) {
@@ -259,11 +281,6 @@ public class OneToRuleTHEMALL extends SimpleBaseGameActivity{
         camera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
         return new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED, new FillResolutionPolicy(), camera);
 
-    }
-    @Override
-    public final void onPopulateScene(final Scene pScene, final OnPopulateSceneCallback pOnPopulateSceneCallback) throws IOException {
-
-        pOnPopulateSceneCallback.onPopulateSceneFinished();
     }
 
 }
