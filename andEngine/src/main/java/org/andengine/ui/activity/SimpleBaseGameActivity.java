@@ -53,7 +53,7 @@ public abstract class SimpleBaseGameActivity extends BaseGameActivity {
 	}
 
 	@Override
-	public final void onPopulateScene(final Scene pScene, final OnPopulateSceneCallback pOnPopulateSceneCallback) throws IOException {
+	public void onPopulateScene(final Scene pScene, final OnPopulateSceneCallback pOnPopulateSceneCallback) throws IOException {
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 	}
 
