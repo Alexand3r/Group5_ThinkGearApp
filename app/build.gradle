@@ -36,7 +36,6 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile files('libs/ThinkGear.jar')
-    compile files('libs/libs.jar')
     compile project(':andEngine')
     compile project(':andEnginePhysicsBox2DExtension')
     compile fileTree(include: ['*'], dir: 'res')

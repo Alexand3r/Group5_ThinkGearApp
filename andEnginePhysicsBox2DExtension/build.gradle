@@ -30,6 +30,5 @@ android {
 
 dependencies {
     compile project(':andEngine')
-    compile files('src/main/libs.jar')
     compile fileTree(include: ['*'], dir: 'libs')
 }

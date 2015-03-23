@@ -110,7 +110,6 @@
     <orderEntry type="library" exported="" name="ThinkGear" level="project" />
     <orderEntry type="library" exported="" name="support-v4-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-21.0.3" level="project" />
-    <orderEntry type="library" exported="" name="libs" level="project" />
     <orderEntry type="module" module-name="andEngine" exported="" />
     <orderEntry type="module" module-name="andEnginePhysicsBox2DExtension" exported="" />
   </component>
