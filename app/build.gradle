@@ -3,7 +3,14 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
-
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'armeabi', 'armeabi-v7a', 'x86'
+            universalApk true
+        }
+    }
     defaultConfig {
         applicationId "g5.mindwave"
         minSdkVersion 15

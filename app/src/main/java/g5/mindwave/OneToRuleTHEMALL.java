@@ -1,4 +1,4 @@
-package g5.mindwave;
+/*package g5.mindwave;
 
 import android.bluetooth.BluetoothAdapter;
 import android.hardware.SensorManager;
@@ -32,88 +32,49 @@ import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
-import org.andengine.input.sensor.acceleration.AccelerationData;
-import org.andengine.input.sensor.acceleration.IAccelerationListener;
-import org.andengine.opengl.texture.ITexture;
-import org.andengine.opengl.texture.bitmap.BitmapTexture;
-import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.texture.region.TextureRegionFactory;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
-import org.andengine.util.adt.io.in.IInputStreamOpener;
-import org.andengine.util.debug.Debug;
 
 import java.io.IOException;
-import java.io.InputStream;
 
-/**
- * Created by Andrei on 3/20/2015.
- */
-public class OneToRuleTHEMALL extends SimpleBaseGameActivity implements IAccelerationListener{
-    TGDevice tgDevice;
-    BluetoothAdapter btAdapter;
-    Camera camera;
+
+ // Created by Andrei on 3/20/2015.
+
+//public class OneToRuleTHEMALL extends SimpleBaseGameActivity {
+    // TGDevice tgDevice;
+    //BluetoothAdapter btAdapter;
+    //Camera camera;
     Scene scene;
     Sprite carSprite;
     Sprite wheelSprite1;
     Sprite wheelSprite2;
     Body wheelBody1,wheelBody2,carBody;
-
+    ResourcesManager resourcesManager;
     static RevoluteJoint rj1;
     static RevoluteJoint rj2;
 
     PhysicsHandler carPhysicsHandler;
 
     private PhysicsWorld mPhysicsWorld;
-    public static final float PIXEL_TO_METER_RATIO_DEFAULT = 32.0f;
+
     private static int CAMERA_WIDTH = 800;
     private static int CAMERA_HEIGHT = 480;
     private static FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(10f, 0.0f, 0.2f);
 
-    int x=0;
 
-    private ITextureRegion mBackgroundTextureRegion,mCarTextureRegion,mWheel1;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-      //  setContentView(R.layout.activity_main);
-
     }
 
     @Override
     public void onCreateResources() throws IOException {
-       try {
-           ITexture backgroundTexture = new BitmapTexture(this.getTextureManager(), new IInputStreamOpener() {
-               @Override
-               public InputStream open() throws IOException {
-                   return getAssets().open("gfx/splash1.png");
-               }
-           });
-           backgroundTexture.load();
-           this.mBackgroundTextureRegion = TextureRegionFactory.extractFromTexture(backgroundTexture);
-           ITexture carTexture = new BitmapTexture(this.getTextureManager(), new IInputStreamOpener() {
-               @Override
-               public InputStream open() throws IOException {
-                   return getAssets().open("gfx/car3.png");
-               }
-           });
-           carTexture.load();
-           this.mCarTextureRegion = TextureRegionFactory.extractFromTexture(carTexture);
-
-           ITexture wheel1Texture = new BitmapTexture(this.getTextureManager(), new IInputStreamOpener() {
-               @Override
-               public InputStream open() throws IOException {
-                   return getAssets().open("gfx/roata.png");
-               }
-           });
-           wheel1Texture.load();
-            this.mWheel1 = TextureRegionFactory.extractFromTexture(wheel1Texture);
-       }
-       catch (IOException e) {
-           Debug.e(e);
-       }
+        resourcesManager = ResourcesManager.getInstance();
+       // resourcesManager.prepareManager(mEngine, this, camera, getVertexBufferObjectManager());
+       // resourcesManager.loadGraphics();
     }
 
     @Override
      public  Scene onCreateScene() {
+
 
         //Engine Options
 
@@ -137,14 +98,14 @@ public class OneToRuleTHEMALL extends SimpleBaseGameActivity implements IAcceler
 
         //Logo
 
-        Sprite backgroundSprite = new Sprite(400,240, this.mBackgroundTextureRegion,getVertexBufferObjectManager());
+        Sprite backgroundSprite = new Sprite(400,240, resourcesManager.mBackgroundTextureRegion,getVertexBufferObjectManager());
         scene.attachChild(backgroundSprite);
         //Sprite backgroundSprite1 = new Sprite(800,240, this.mBackgroundTextureRegion,getVertexBufferObjectManager());
         //scene.attachChild(backgroundSprite1);
 
         //Car Body
 
-        carSprite = new Sprite(200,100, this.mCarTextureRegion,getVertexBufferObjectManager());
+        carSprite = new Sprite(200,100, resourcesManager.mCarTextureRegion,getVertexBufferObjectManager());
         scene.attachChild(carSprite);
 
         carBody=PhysicsFactory.createBoxBody(this.mPhysicsWorld,carSprite, BodyDef.BodyType.DynamicBody,FIXTURE_DEF);
@@ -152,13 +113,13 @@ public class OneToRuleTHEMALL extends SimpleBaseGameActivity implements IAcceler
         //Car Wheels
 
 
-        wheelSprite1 = new Sprite(118,53,this.mWheel1,getVertexBufferObjectManager());
+        wheelSprite1 = new Sprite(118,53,resourcesManager.mWheel1,getVertexBufferObjectManager());
         wheelBody1= PhysicsFactory.createCircleBody(this.mPhysicsWorld, wheelSprite1, BodyDef.BodyType.DynamicBody, FIXTURE_DEF);
         this.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(wheelSprite1,wheelBody1));
         scene.attachChild(wheelSprite1);
 
 
-        wheelSprite2 = new Sprite(292,55,this.mWheel1,getVertexBufferObjectManager());
+        wheelSprite2 = new Sprite(292,55,resourcesManager.mWheel1,getVertexBufferObjectManager());
         wheelBody2= PhysicsFactory.createCircleBody(this.mPhysicsWorld, wheelSprite2, BodyDef.BodyType.DynamicBody, FIXTURE_DEF);
         this.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(wheelSprite2,wheelBody2));
         scene.attachChild(wheelSprite2);
@@ -283,25 +244,7 @@ public class OneToRuleTHEMALL extends SimpleBaseGameActivity implements IAcceler
 
     }
 
-    @Override
-    public void onAccelerationAccuracyChanged(AccelerationData pAccelerationData) {
 
-    }
-
-    @Override
-    public void onAccelerationChanged(final AccelerationData pAccelerationData) {
-
-    }
-    @Override
-    public void onResumeGame() {
-        super.onResumeGame();
-        this.enableAccelerationSensor(this);
-    }
-    @Override
-    public void onPauseGame() {
-        super.onPauseGame();
-        this.disableAccelerationSensor();
-    }
 
 }
-
+*/
