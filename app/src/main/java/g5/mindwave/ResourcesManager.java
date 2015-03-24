@@ -10,15 +10,13 @@ import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.andengine.opengl.texture.bitmap.BitmapTexture;
+import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
+import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
+import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.texture.region.TextureRegionFactory;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.adt.io.in.IInputStreamOpener;
 import org.andengine.util.debug.Debug;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Created by Andrei on 3/23/2015.
@@ -33,6 +31,10 @@ public class ResourcesManager {
     public ITextureRegion menu_bagckgroundTR,menu_buttonPlayTR,menu_buttonPlayPtr;
     public Font font;
 
+    private BuildableBitmapTextureAtlas menuTextureAtlas;
+
+    // Game Texture
+    public BuildableBitmapTextureAtlas gameTextureAtlas;
     public static ResourcesManager getInstance()
     {
         return INSTANCE;
@@ -61,34 +63,18 @@ public class ResourcesManager {
     }
 
     private void loadMenuGraphics()
-    {
-        try{
-            ITexture menubg = new BitmapTexture(activity.getTextureManager(),new IInputStreamOpener() {
-                @Override
-                public InputStream open() throws IOException {
-                    return activity.getAssets().open("menu/background.png");
-                }
-            });
-            menubg.load();
-            menu_bagckgroundTR = TextureRegionFactory.extractFromTexture(menubg);
-            ITexture menubtn_idle = new BitmapTexture(activity.getTextureManager(),new IInputStreamOpener() {
-                @Override
-                public InputStream open() throws IOException {
-                    return activity.getAssets().open("menu/play_idle.png");
-                }
-            });
-            menubtn_idle.load();
-            menu_buttonPlayTR = TextureRegionFactory.extractFromTexture(menubtn_idle);
-            ITexture menubtn_pressed = new BitmapTexture(activity.getTextureManager(),new IInputStreamOpener() {
-                @Override
-                public InputStream open() throws IOException {
-                    return activity.getAssets().open("menu/play_pressed.png");
-                }
-            });
-            menubtn_pressed.load();
-            menu_buttonPlayPtr = TextureRegionFactory.extractFromTexture(menubtn_pressed);
+    {   BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("menu/");
+        menuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
+        menu_bagckgroundTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "background.png");
+        menu_buttonPlayTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "play_idle.png");
+        menu_buttonPlayPtr = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "play_pressed.png");
+        try
+        {
+            this.menuTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
+            this.menuTextureAtlas.load();
         }
-        catch (IOException e) {
+        catch (final TextureAtlasBuilderException e)
+        {
             Debug.e(e);
         }
 
@@ -100,43 +86,24 @@ public class ResourcesManager {
     }
 
     private void loadGameGraphics()
-    {
-        try {
-            ITexture backgroundTexture = new BitmapTexture(activity.getTextureManager(), new IInputStreamOpener() {
-                @Override
-                public InputStream open() throws IOException {
-                    return activity.getAssets().open("gfx/splash1.png");
-                }
-            });
-            backgroundTexture.load();
+    {   BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 
-            mBackgroundTextureRegion = TextureRegionFactory.extractFromTexture(backgroundTexture);
+        gameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.BILINEAR);
+        mBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "background.png");
+        mCarTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "car3.png");
+        mWheel1 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "roata.png");
 
-            ITexture carTexture = new BitmapTexture(activity.getTextureManager(), new IInputStreamOpener() {
-                @Override
-                public InputStream open() throws IOException {
-                    return activity.getAssets().open("gfx/car3.png");
-                }
-            });
-
-            carTexture.load();
-
-            mCarTextureRegion = TextureRegionFactory.extractFromTexture(carTexture);
-
-            ITexture wheel1Texture = new BitmapTexture(activity.getTextureManager(), new IInputStreamOpener() {
-                @Override
-                public InputStream open() throws IOException {
-                    return activity.getAssets().open("gfx/roata.png");
-                }
-            });
-
-            wheel1Texture.load();
-
-            mWheel1 = TextureRegionFactory.extractFromTexture(wheel1Texture);
+        try
+        {
+            this.gameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
+            this.gameTextureAtlas.load();
+           // this.mParticleTexture = new AssetBitmapTexture(activity.getTextureManager(), activity.getAssets(), "gfx/particle_fire.png", TextureOptions.BILINEAR);
         }
-        catch (IOException e) {
+        catch (final TextureAtlasBuilderException e)
+        {
             Debug.e(e);
         }
+
     }
 
     private void loadGameFonts() {
@@ -153,15 +120,7 @@ public class ResourcesManager {
     }
     private BitmapTextureAtlas splashTextureAtlas;
     public void loadSplashScreen()
-    { /*try {
-        ITexture backgroundTexture = new BitmapTexture(activity.getTextureManager(), new IInputStreamOpener() {
-            @Override
-            public InputStream open() throws IOException {
-                return activity.getAssets().open("gfx/splash1.png");
-            }
-        });
-        backgroundTexture.load();
-        splash_region = TextureRegionFactory.extractFromTexture(backgroundTexture);*/
+    {
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
         splashTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
         splash_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(splashTextureAtlas, activity, "splash1.png", 0, 0);
@@ -172,7 +131,7 @@ public class ResourcesManager {
 
 
     public void unloadSplashScreen() {
-       // splash_region.unload();
+        splashTextureAtlas.unload();
         splash_region = null;
     }
 
