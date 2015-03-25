@@ -28,7 +28,7 @@ public class ResourcesManager {
     public Activity activity;
     public BoundCamera camera;
     public VertexBufferObjectManager vbom;
-    public ITextureRegion mBackgroundTextureRegion,mCarTextureRegion,mWheel1,splash_region;
+    public ITextureRegion mBackgroundTextureRegion ,mCarTextureRegion,mWheel1,splash_region;
     public ITextureRegion menu_bagckgroundTR,menu_buttonPlayTR,menu_buttonPlayPtr;
     public Font font;
 
@@ -38,6 +38,7 @@ public class ResourcesManager {
      public ITextureRegion mParallaxLayerBackTextureRegion;
      public ITextureRegion mParallaxLayerMidTextureRegion;
      public ITextureRegion mParallaxLayerFrontTextureRegion;
+     public ITextureRegion mParallaxLayerFrontSecondTextureRegion;
 
     private BuildableBitmapTextureAtlas menuTextureAtlas;
 
@@ -79,7 +80,7 @@ public class ResourcesManager {
     {   BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("menu/");
         menuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
         menu_bagckgroundTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "background.png");
-        menu_buttonPlayTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "play_idle.png");
+               menu_buttonPlayTR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "play_idle.png");
         menu_buttonPlayPtr = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "play_pressed.png");
         try
         {
@@ -109,8 +110,9 @@ public class ResourcesManager {
        //Parallax - este extrem de greu sa incarci niste poze
 
         mParallaxLayerBackTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "p_back.png");
-        mParallaxLayerMidTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas,activity,"p_mid.png");
-        mParallaxLayerFrontTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas,activity,"p_front.png");
+        mParallaxLayerMidTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas,activity,"tree.png");
+        mParallaxLayerFrontTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas,activity,"DinoSign.png");
+        mParallaxLayerFrontSecondTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas,activity,"StreetSign.png");
         try
         {
             this.gameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));

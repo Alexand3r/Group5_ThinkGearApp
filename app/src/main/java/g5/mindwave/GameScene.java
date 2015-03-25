@@ -76,12 +76,18 @@ public class GameScene extends BaseScene {
         final Sprite parallaxLayerBackSprite = new Sprite(0, 0, resourcesManager.mParallaxLayerBackTextureRegion, vbom);
         parallaxLayerBackSprite.setOffsetCenter(0, 0);
         autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(0.0f, parallaxLayerBackSprite));
+
         final Sprite parallaxLayerMidSprite = new Sprite(0, CAMERA_HEIGHT - resourcesManager.mParallaxLayerMidTextureRegion.getHeight() - 80, resourcesManager.mParallaxLayerMidTextureRegion, vbom);
         parallaxLayerMidSprite.setOffsetCenter(0, 0);
         autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-5.0f, parallaxLayerMidSprite));
+
         final Sprite parallaxLayerFrontSprite = new Sprite(0, 0, resourcesManager.mParallaxLayerFrontTextureRegion, vbom);
         parallaxLayerFrontSprite.setOffsetCenter(0, 0);
-        autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-10.0f, parallaxLayerFrontSprite));
+        autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-15.0f, parallaxLayerFrontSprite));
+
+      //  final Sprite parallaxLayerFrontSecondSprite = new Sprite(0, 0, resourcesManager.mParallaxLayerFrontSecondTextureRegion, vbom);
+      //  parallaxLayerFrontSecondSprite.setOffsetCenter(0, 0);
+      //  autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-10.0f, parallaxLayerFrontSecondSprite));
 
     }
 
