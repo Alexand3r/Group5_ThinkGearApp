@@ -18,7 +18,9 @@ public class AutoParallaxBackground extends ParallaxBackground {
 	// Fields
 	// ===========================================================
 
-	private float mParallaxChangePerSecond;
+    private float mParallaxChangePerSecond;
+    private boolean moving;
+
 
 	// ===========================================================
 	// Constructors
@@ -45,7 +47,7 @@ public class AutoParallaxBackground extends ParallaxBackground {
 	@Override
 	public void onUpdate(final float pSecondsElapsed) {
 		super.onUpdate(pSecondsElapsed);
-
+        if(moving)
 		this.mParallaxValue += this.mParallaxChangePerSecond * pSecondsElapsed;
 	}
 
@@ -53,6 +55,13 @@ public class AutoParallaxBackground extends ParallaxBackground {
 	// Methods
 	// ===========================================================
 
+    public void start(){
+        this.moving = true;
+    }
+
+    public void stop(){
+        this.moving = false;
+    }
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
