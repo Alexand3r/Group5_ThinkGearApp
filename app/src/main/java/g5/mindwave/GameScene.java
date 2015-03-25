@@ -110,14 +110,14 @@ public class GameScene extends BaseScene {
                                                                  Toast connecting = Toast.makeText(activity.getApplicationContext(),"Connecting", Toast.LENGTH_SHORT);
                                                                  connecting.show();
                                                                  break;
-                                                             case TGDevice.STATE_CONNECTED: tgDevice.start();
+                                                             case TGDevice.STATE_CONNECTED:
+                                                                 tgDevice.start();
                                                                  Log.v("HelloEEG","Connected");
                                                                  //TODO Start the wheels spinning, timer, etc.
 
                                                                  Toast connected = Toast.makeText(activity.getApplicationContext(),"Connected to "+tgDevice.getConnectedDevice().getName(), Toast.LENGTH_SHORT);
                                                                  connected.show();
-                                                                 if(started)
-                                                                     start();
+
                                                                  break;
                                                              case TGDevice.STATE_DISCONNECTED:
                                                                  Toast disconnected = Toast.makeText(activity.getApplicationContext(),"Disconnected", Toast.LENGTH_SHORT);
@@ -139,7 +139,11 @@ public class GameScene extends BaseScene {
                                                          break;
                                                      case TGDevice.MSG_MEDITATION:
                                                          Log.v("HelloEEG", "Meditation:" +msg.arg1);
-                                                         rj2.setMotorSpeed(msg.arg1);
+                                                         Log.v("Motor",Float.toString(rj2.getMotorSpeed()));
+                                                         if(started&&msg.arg1>0)
+                                                             start();
+                                                         if(stopped)
+                                                         rj2.setMotorSpeed(msg.arg1*100);
                                                          //  progressMeditation.setProgress(msg.arg1);
                                                          break;
                                                      case TGDevice.MSG_RAW_DATA:
@@ -165,9 +169,19 @@ public class GameScene extends BaseScene {
                                  }
         );
     }
-
+    boolean stopped = true;
     boolean started = true;
+    public void stop()
+    {
+    autoParallaxBackground.stop();
+    rj2.enableMotor(false);
+        rj2.setMotorSpeed(-rj2.getJointSpeed()*50);
+        rj2.setLimits(0,50);
 
+        rj2.enableLimit(true);
+        rj2.setMaxMotorTorque(0);
+        stopped = false;
+    }
     public void start()
     {
         rj2.enableMotor(true);
@@ -264,6 +278,7 @@ public class GameScene extends BaseScene {
         public void onUpdate(final float pSecondsElapsed) {
             if(wall.collidesWith(carSprite)) {
                 wall.setColor(1, 0, 0);
+                stop();
             } else {
                 wall.setColor(0, 1, 0);
             }

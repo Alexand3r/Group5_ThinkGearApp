@@ -114,7 +114,7 @@ public class ResourcesManager {
 
        //Parallax - este extrem de greu sa incarci niste poze
 
-        mParallaxLayerBackTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "p_back.png");
+        mParallaxLayerBackTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road.png");
         mParallaxLayerMidTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas,activity,"tree.png");
         mParallaxLayerFrontTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas,activity,"DinoSign.png");
         mParallaxLayerFrontSecondTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas,activity,"StreetSign.png");
