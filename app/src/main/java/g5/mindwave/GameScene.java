@@ -20,12 +20,15 @@ import com.neurosky.thinkgear.TGEegPower;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.scene.background.AutoParallaxBackground;
+import org.andengine.entity.scene.background.ParallaxBackground.ParallaxEntity;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
+import org.andengine.util.adt.color.Color;
 
 import g5.mindwave.SceneManager.SceneType;
 /**
@@ -57,9 +60,28 @@ public class GameScene extends BaseScene {
 
 
         CreateWorld();
+        //Parallax - este foarte greu sa-l rendezi
+        loadParallax();
+
         createCar();
         SetCamera();
         ThinkGear();
+
+    }
+
+    private void loadParallax() {
+        final AutoParallaxBackground autoParallaxBackground = new AutoParallaxBackground(255, 255, 255, 5);
+        this.setBackground(autoParallaxBackground);
+
+        final Sprite parallaxLayerBackSprite = new Sprite(0, 0, resourcesManager.mParallaxLayerBackTextureRegion, vbom);
+        parallaxLayerBackSprite.setOffsetCenter(0, 0);
+        autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(0.0f, parallaxLayerBackSprite));
+        final Sprite parallaxLayerMidSprite = new Sprite(0, CAMERA_HEIGHT - resourcesManager.mParallaxLayerMidTextureRegion.getHeight() - 80, resourcesManager.mParallaxLayerMidTextureRegion, vbom);
+        parallaxLayerMidSprite.setOffsetCenter(0, 0);
+        autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-5.0f, parallaxLayerMidSprite));
+        final Sprite parallaxLayerFrontSprite = new Sprite(0, 0, resourcesManager.mParallaxLayerFrontTextureRegion, vbom);
+        parallaxLayerFrontSprite.setOffsetCenter(0, 0);
+        autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-10.0f, parallaxLayerFrontSprite));
 
     }
 
@@ -167,16 +189,16 @@ public class GameScene extends BaseScene {
         wheelBody2.setMassData(wheel1Mass);
         this.attachChild(wheelSprite2);
 
-        //Connect back wheel to th car body using revoluteJoint
+        //Connect back wheel to the car body using revoluteJoint
 
         final RevoluteJointDef revoluteJointDef1 = new RevoluteJointDef();
         revoluteJointDef1.initialize(wheelBody1, carBody, wheelBody1.getWorldCenter());
-        revoluteJointDef1.enableMotor = true;
+        revoluteJointDef1.enableMotor = false;
         revoluteJointDef1.motorSpeed = 1000;
         revoluteJointDef1.maxMotorTorque = 100;
         rj1 = (RevoluteJoint) this.mPhysicsWorld.createJoint(revoluteJointDef1);
 
-        //Connect front wheel to rear axle using revoluteJoint
+        //Connect front wheel to the car body using revoluteJoint
 
         final RevoluteJointDef revoluteJointDef2 = new RevoluteJointDef();
         revoluteJointDef2.initialize(wheelBody2, carBody, wheelBody2.getWorldCenter());
@@ -202,6 +224,7 @@ public class GameScene extends BaseScene {
     //Physics
     this.mPhysicsWorld = new PhysicsWorld(new Vector2(0, SensorManager.GRAVITY_EARTH), false);
     final Rectangle ground = new Rectangle(400, 30 ,160000.0f, 2, vbom);
+        ground.setColor(Color.BLACK);
     final Rectangle wall =  new Rectangle(1500,0,100,2000,vbom);
     final FixtureDef wallFixtureDef = PhysicsFactory.createFixtureDef(0, 0.5f, 0.5f);
     PhysicsFactory.createBoxBody(this.mPhysicsWorld, ground, BodyDef.BodyType.StaticBody, wallFixtureDef);
@@ -211,8 +234,8 @@ public class GameScene extends BaseScene {
 
     //Background
 
-    Sprite backgroundSprite = new Sprite(400,240, resourcesManager.mBackgroundTextureRegion,vbom);
-    this.attachChild(backgroundSprite);
+    //Sprite backgroundSprite = new Sprite(400,240, resourcesManager.mBackgroundTextureRegion,vbom);
+   // this.attachChild(backgroundSprite);
     //Sprite backgroundSprite1 = new Sprite(800,240, this.mBackgroundTextureRegion,getVertexBufferObjectManager());
     //scene.attachChild(backgroundSprite1);
     this.registerUpdateHandler(this.mPhysicsWorld);

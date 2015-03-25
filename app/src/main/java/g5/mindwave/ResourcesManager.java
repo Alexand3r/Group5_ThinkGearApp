@@ -32,6 +32,13 @@ public class ResourcesManager {
     public ITextureRegion menu_bagckgroundTR,menu_buttonPlayTR,menu_buttonPlayPtr;
     public Font font;
 
+    //Parallax- ca e greu sa faci un nenorocit de parallax
+
+
+     public ITextureRegion mParallaxLayerBackTextureRegion;
+     public ITextureRegion mParallaxLayerMidTextureRegion;
+     public ITextureRegion mParallaxLayerFrontTextureRegion;
+
     private BuildableBitmapTextureAtlas menuTextureAtlas;
 
     // Game Texture
@@ -99,6 +106,11 @@ public class ResourcesManager {
         mCarTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "car3.png");
         mWheel1 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "roata.png");
 
+       //Parallax - este extrem de greu sa incarci niste poze
+
+        mParallaxLayerBackTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "p_back.png");
+        mParallaxLayerMidTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas,activity,"p_mid.png");
+        mParallaxLayerFrontTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas,activity,"p_front.png");
         try
         {
             this.gameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
