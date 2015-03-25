@@ -44,7 +44,7 @@ public class GameScene extends BaseScene {
     public Handler handler;
     static RevoluteJoint rj1;
     static RevoluteJoint rj2;
-
+    AutoParallaxBackground autoParallaxBackground;
 
     private PhysicsWorld mPhysicsWorld;
 
@@ -68,7 +68,8 @@ public class GameScene extends BaseScene {
     }
 
     private void loadParallax() {
-        final AutoParallaxBackground autoParallaxBackground = new AutoParallaxBackground(255, 255, 255, 5);
+        autoParallaxBackground = new AutoParallaxBackground(255, 255, 255, 5);
+
         this.setBackground(autoParallaxBackground);
 
         final Sprite parallaxLayerBackSprite = new Sprite(0, 0, resourcesManager.mParallaxLayerBackTextureRegion, vbom);
@@ -77,12 +78,13 @@ public class GameScene extends BaseScene {
 
         final Sprite parallaxLayerMidSprite = new Sprite(0, CAMERA_HEIGHT - resourcesManager.mParallaxLayerMidTextureRegion.getHeight() - 80, resourcesManager.mParallaxLayerMidTextureRegion, vbom);
         parallaxLayerMidSprite.setOffsetCenter(0, 0);
-        autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-5.0f, parallaxLayerMidSprite));
+        ParallaxEntity pMid = new ParallaxEntity(-50.0f, parallaxLayerMidSprite);
+        autoParallaxBackground.attachParallaxEntity(pMid);
 
         final Sprite parallaxLayerFrontSprite = new Sprite(0, 0, resourcesManager.mParallaxLayerFrontTextureRegion, vbom);
         parallaxLayerFrontSprite.setOffsetCenter(0, 0);
-        autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-15.0f, parallaxLayerFrontSprite));
-
+        autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-150.0f, parallaxLayerFrontSprite));
+        autoParallaxBackground.stop();
       //  final Sprite parallaxLayerFrontSecondSprite = new Sprite(0, 0, resourcesManager.mParallaxLayerFrontSecondTextureRegion, vbom);
       //  parallaxLayerFrontSecondSprite.setOffsetCenter(0, 0);
       //  autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-10.0f, parallaxLayerFrontSecondSprite));
@@ -114,6 +116,8 @@ public class GameScene extends BaseScene {
 
                                                                  Toast connected = Toast.makeText(activity.getApplicationContext(),"Connected to "+tgDevice.getConnectedDevice().getName(), Toast.LENGTH_SHORT);
                                                                  connected.show();
+                                                                 if(started)
+                                                                     start();
                                                                  break;
                                                              case TGDevice.STATE_DISCONNECTED:
                                                                  Toast disconnected = Toast.makeText(activity.getApplicationContext(),"Disconnected", Toast.LENGTH_SHORT);
@@ -162,6 +166,15 @@ public class GameScene extends BaseScene {
         );
     }
 
+    boolean started = true;
+
+    public void start()
+    {
+        rj2.enableMotor(true);
+        autoParallaxBackground.start();
+        resourcesManager.mMusic.pause();
+        started = false;
+    }
 
     public void createCar()
     {
@@ -174,6 +187,7 @@ public class GameScene extends BaseScene {
         carBodyMass.mass= 3.9f;
         carBody.setMassData(carBodyMass);
         this.attachChild(carSprite);
+
         resourcesManager.mMusic.play();
         //Car Wheels
 
