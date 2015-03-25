@@ -18,7 +18,6 @@ import com.neurosky.thinkgear.TGDevice;
 import com.neurosky.thinkgear.TGEegPower;
 
 import org.andengine.engine.handler.IUpdateHandler;
-import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.background.AutoParallaxBackground;
 import org.andengine.entity.scene.background.ParallaxBackground.ParallaxEntity;
@@ -46,7 +45,6 @@ public class GameScene extends BaseScene {
     static RevoluteJoint rj1;
     static RevoluteJoint rj2;
 
-    PhysicsHandler carPhysicsHandler;
 
     private PhysicsWorld mPhysicsWorld;
 
@@ -170,7 +168,7 @@ public class GameScene extends BaseScene {
         carBodyMass.mass= 3.9f;
         carBody.setMassData(carBodyMass);
         this.attachChild(carSprite);
-
+        resourcesManager.mMusic.play();
         //Car Wheels
 
 

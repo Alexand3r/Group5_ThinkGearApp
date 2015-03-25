@@ -3,6 +3,8 @@ package g5.mindwave;
 import android.bluetooth.BluetoothAdapter;
 import android.graphics.Color;
 
+import org.andengine.audio.music.Music;
+import org.andengine.audio.music.MusicFactory;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.opengl.font.Font;
@@ -18,6 +20,8 @@ import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.debug.Debug;
+
+import java.io.IOException;
 
 /**
  * Created by Andrei on 3/23/2015.
@@ -44,6 +48,7 @@ public class ResourcesManager {
     // Game Texture
     public BuildableBitmapTextureAtlas gameTextureAtlas;
     public BluetoothAdapter btAdapter;
+    public Music mMusic;
 
 
     public static ResourcesManager getInstance()
@@ -134,6 +139,14 @@ public class ResourcesManager {
 
     private void loadGameAudio()
     {
+
+        MusicFactory.setAssetBasePath("mfx/");
+        try {
+            mMusic = MusicFactory.createMusicFromAsset(engine.getMusicManager(), activity.getApplicationContext(), "idle.wav");
+            mMusic.setLooping(true);
+        } catch (final IOException e) {
+            Debug.e(e);
+        }
 
     }
     private BitmapTextureAtlas splashTextureAtlas;

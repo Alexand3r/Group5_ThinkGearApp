@@ -57,9 +57,10 @@ public void connect(TGDevice tg)
     @Override
     public EngineOptions onCreateEngineOptions() {
         camera = new BoundCamera(0, 0, 800, 480);
-       // camera.setChaseEntity(e);
 
-        return new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR, new FillResolutionPolicy(), camera);
+        final EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR, new FillResolutionPolicy(), camera);
+        engineOptions.getAudioOptions().setNeedsMusic(true);
+        return engineOptions;
 
     }
 
