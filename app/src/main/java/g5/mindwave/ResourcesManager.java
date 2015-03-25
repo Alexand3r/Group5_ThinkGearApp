@@ -1,9 +1,10 @@
 package g5.mindwave;
 
+import android.bluetooth.BluetoothAdapter;
 import android.graphics.Color;
 
 import org.andengine.engine.Engine;
-import org.andengine.engine.camera.Camera;
+import org.andengine.engine.camera.BoundCamera;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.ITexture;
@@ -25,7 +26,7 @@ public class ResourcesManager {
     private static final ResourcesManager INSTANCE = new ResourcesManager();
     public Engine engine;
     public Activity activity;
-    public Camera camera;
+    public BoundCamera camera;
     public VertexBufferObjectManager vbom;
     public ITextureRegion mBackgroundTextureRegion,mCarTextureRegion,mWheel1,splash_region;
     public ITextureRegion menu_bagckgroundTR,menu_buttonPlayTR,menu_buttonPlayPtr;
@@ -35,16 +36,21 @@ public class ResourcesManager {
 
     // Game Texture
     public BuildableBitmapTextureAtlas gameTextureAtlas;
+    public BluetoothAdapter btAdapter;
+
+
     public static ResourcesManager getInstance()
     {
         return INSTANCE;
     }
-    public static void prepareManager(Engine engine, Activity activity, Camera camera, VertexBufferObjectManager vbom)
+    public static void prepareManager(Engine engine, Activity activity, BoundCamera camera, VertexBufferObjectManager vbom,BluetoothAdapter btAdapter)
     {
         getInstance().engine = engine;
         getInstance().activity = activity;
         getInstance().camera = camera;
         getInstance().vbom = vbom;
+        getInstance().btAdapter = btAdapter;
+
 
     }
     public void loadMenuResources()

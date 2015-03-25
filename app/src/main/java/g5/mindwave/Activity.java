@@ -1,10 +1,14 @@
 package g5.mindwave;
 
+import android.bluetooth.BluetoothAdapter;
 import android.os.Bundle;
+import android.util.Log;
+
+import com.neurosky.thinkgear.TGDevice;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.LimitedFPSEngine;
-import org.andengine.engine.camera.Camera;
+import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
@@ -20,11 +24,10 @@ import java.io.IOException;
  */
 public class Activity extends BaseGameActivity {
 
-    public static Camera camera;
+    public static BoundCamera camera;
 
     ResourcesManager resourcesManager;
-
-
+    public BluetoothAdapter btAdapter;
 
     @Override
     public Engine onCreateEngine(EngineOptions pEngineOptions)
@@ -38,19 +41,32 @@ public class Activity extends BaseGameActivity {
     }
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        Log.v("BT:", btAdapter.getName());
+
     }
 
 
+
+public void connect(TGDevice tg)
+
+    {tg.connect(true);}
     @Override
     public EngineOptions onCreateEngineOptions() {
-        camera = new Camera(0, 0, 800, 480);
+        camera = new BoundCamera(0, 0, 800, 480);
+       // camera.setChaseEntity(e);
+
         return new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR, new FillResolutionPolicy(), camera);
 
     }
 
     @Override
     public void onCreateResources(OnCreateResourcesCallback pOnCreateResourcesCallback) throws IOException {
-        ResourcesManager.prepareManager(mEngine, this, camera, getVertexBufferObjectManager());
+
+        ResourcesManager.prepareManager(mEngine, this, camera, getVertexBufferObjectManager(),btAdapter);
         resourcesManager = ResourcesManager.getInstance();
         pOnCreateResourcesCallback.onCreateResourcesFinished();
     }

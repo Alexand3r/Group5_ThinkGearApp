@@ -1,11 +1,15 @@
 package g5.mindwave;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+
+import com.neurosky.thinkgear.TGDevice;
 
 import org.andengine.engine.Engine;
-import org.andengine.engine.camera.Camera;
+import org.andengine.engine.camera.BoundCamera;
 import org.andengine.entity.scene.Scene;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+
 import g5.mindwave.SceneManager.SceneType;
 /**
  * Created by Andrei on 3/23/2015.
@@ -20,8 +24,9 @@ public abstract class BaseScene extends Scene
     protected Activity activity;
     protected ResourcesManager resourcesManager;
     protected VertexBufferObjectManager vbom;
-    protected Camera camera;
-
+    protected BoundCamera camera;
+    protected BluetoothAdapter btAdapter;
+    protected TGDevice tgDevice;
     //---------------------------------------------
     // CONSTRUCTOR
     //---------------------------------------------
@@ -33,6 +38,7 @@ public abstract class BaseScene extends Scene
         this.activity = resourcesManager.activity;
         this.vbom = resourcesManager.vbom;
         this.camera = resourcesManager.camera;
+        this.btAdapter=resourcesManager.btAdapter;
         createScene();
     }
 
