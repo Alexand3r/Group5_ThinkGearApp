@@ -43,9 +43,9 @@ public class Activity extends BaseGameActivity {
         super.onCreate(savedInstanceState);
 
 
-        btAdapter = BluetoothAdapter.getDefaultAdapter();
+       // btAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        Log.v("BT:", btAdapter.getName());
+       // Log.v("BT:", btAdapter.getName());
 
     }
 

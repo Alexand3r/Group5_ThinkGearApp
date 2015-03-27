@@ -6,6 +6,7 @@ import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.scene.background.IBackground;
+import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.shape.IShape;
 import org.andengine.entity.shape.Shape;
 import org.andengine.input.touch.TouchEvent;
@@ -91,6 +92,8 @@ public class Scene extends Entity {
 	public void setBackground(final IBackground pBackground) {
 		this.mBackground = pBackground;
 	}
+
+    public void setPBackground(ParallaxBackground parallaxBackground) {this.mBackground = parallaxBackground;}
 
 	public boolean isBackgroundEnabled() {
 		return this.mBackgroundEnabled;

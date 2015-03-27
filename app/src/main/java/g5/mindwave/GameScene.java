@@ -17,17 +17,24 @@ import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.neurosky.thinkgear.TGDevice;
 import com.neurosky.thinkgear.TGEegPower;
 
+import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.IUpdateHandler;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.background.AutoParallaxBackground;
 import org.andengine.entity.scene.background.ParallaxBackground.ParallaxEntity;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
+import org.andengine.entity.text.TextOptions;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
+import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
+
 
 import g5.mindwave.SceneManager.SceneType;
 /**
@@ -51,6 +58,9 @@ public class GameScene extends BaseScene {
     private static int CAMERA_WIDTH = 800;
     private static int CAMERA_HEIGHT = 480;
     private static FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(10f, 0.0f, 0.2f);
+    private HUD gameHUD;
+    private Text scoreText;
+    private int score;
 
     @Override
     public void createScene() {
@@ -64,6 +74,8 @@ public class GameScene extends BaseScene {
         createCar();
         SetCamera();
         ThinkGear();
+        createHUD();
+
 
     }
 
@@ -139,7 +151,7 @@ public class GameScene extends BaseScene {
                                                          break;
                                                      case TGDevice.MSG_MEDITATION:
                                                          Log.v("HelloEEG", "Meditation:" +msg.arg1);
-                                                         Log.v("Motor",Float.toString(rj2.getMotorSpeed()));
+                                                         Log.v("Motor", Float.toString(rj2.getMotorSpeed()));
                                                          if(started&&msg.arg1>0)
                                                              start();
                                                          if(stopped)
@@ -234,7 +246,7 @@ public class GameScene extends BaseScene {
 
         final RevoluteJointDef revoluteJointDef2 = new RevoluteJointDef();
         revoluteJointDef2.initialize(wheelBody2, carBody, wheelBody2.getWorldCenter());
-        revoluteJointDef2.enableMotor = false;
+        revoluteJointDef2.enableMotor = true;
         //speed
         revoluteJointDef2.motorSpeed = 50;
         //Torque, more torque = more wheel 'burnout'
@@ -284,12 +296,50 @@ public class GameScene extends BaseScene {
             }
         }
     });
-    // this.enableAccelerationSensor(this);
+     //this.enableAccelerationSensor(this);
     final Vector2 gravity = Vector2Pool.obtain(0, -9.8f);
     this.mPhysicsWorld.setGravity(gravity);
     //Vector2Pool.recycle(gravity);
 
 }
+
+    public void createHUD() {
+
+
+
+        gameHUD = new HUD();
+
+        scoreText = new Text(20, 420, resourcesManager.font, "Score:0123456789", new TextOptions(HorizontalAlign.LEFT), vbom);
+        scoreText.setAnchorCenter(0 ,0);
+        scoreText.setText("Score: 0");
+        gameHUD.attachChild(scoreText);
+        camera.setHUD(gameHUD);
+        scoreTimeHandler();
+
+
+
+    }
+
+    private void updateScore() {
+
+        score++;
+        scoreText.setText("Score: " + score);
+    }
+
+    private void scoreTimeHandler() {
+        TimerHandler scoreTimerHandler;
+        float scoreUp = 1;
+
+        scoreTimerHandler = new TimerHandler(scoreUp, true, new ITimerCallback() {
+            @Override
+            public void onTimePassed(TimerHandler pTimerHandler) {
+                if(rj2.isMotorEnabled()) {
+                    updateScore();}
+            }
+        });
+        engine.registerUpdateHandler(scoreTimerHandler);
+
+    }
 
     @Override
     public void onBackKeyPressed() {
