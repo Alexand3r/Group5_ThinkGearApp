@@ -60,6 +60,8 @@ public class GameScene extends BaseScene {
     private static FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(10f, 0.0f, 0.2f);
     private HUD gameHUD;
     private Text scoreText;
+    private Text highScore;
+    private int highSc;
     private int score;
 
     @Override
@@ -305,26 +307,31 @@ public class GameScene extends BaseScene {
 
     public void createHUD() {
 
-
-
         gameHUD = new HUD();
 
         scoreText = new Text(20, 420, resourcesManager.font, "Score:0123456789", new TextOptions(HorizontalAlign.LEFT), vbom);
         scoreText.setAnchorCenter(0 ,0);
         scoreText.setText("Score: 0");
         gameHUD.attachChild(scoreText);
+        highScore = new Text(250, 420, resourcesManager.font, "High Score:0123456789", new TextOptions(HorizontalAlign.LEFT), vbom);
+        highScore.setAnchorCenter(0, 0);
+        highScore.setText("High Score: 0");
+        gameHUD.attachChild(highScore);
         camera.setHUD(gameHUD);
         scoreTimeHandler();
-
-
-
     }
 
     private void updateScore() {
 
         score++;
         scoreText.setText("Score: " + score);
+        highSc = score;
+        if (score >= highSc) {
+            highSc = score;
+        }
+          highScore.setText("High Score: " + highSc);
     }
+
 
     private void scoreTimeHandler() {
         TimerHandler scoreTimerHandler;
