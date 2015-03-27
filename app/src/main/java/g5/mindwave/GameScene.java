@@ -325,7 +325,7 @@ public class GameScene extends BaseScene {
 
         score++;
         scoreText.setText("Score: " + score);
-        highSc = score;
+        
         if (score >= highSc) {
             highSc = score;
         }
@@ -350,7 +350,14 @@ public class GameScene extends BaseScene {
 
     @Override
     public void onBackKeyPressed() {
+        carSprite.setPosition(200, 100);
+        rj2.enableMotor(true);
+        score = 0;
 
+       /*GameScene gameScene;
+        gameScene = null;
+        gameScene = new GameScene();
+        engine.setScene(gameScene);*/
     }
 
     @Override

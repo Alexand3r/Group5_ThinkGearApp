@@ -3,6 +3,7 @@ package g5.mindwave;
 import android.bluetooth.BluetoothAdapter;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 
 import com.neurosky.thinkgear.TGDevice;
 
@@ -91,7 +92,13 @@ public void connect(TGDevice tg)
         pOnPopulateSceneCallback.onPopulateSceneFinished();
     }
 
-
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            SceneManager.getInstance().getCurrentScene().onBackKeyPressed();
+        }
+        return false;
+    }
 }
 
 
