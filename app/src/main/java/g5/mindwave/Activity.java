@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import com.neurosky.thinkgear.TGDevice;
-
 import org.andengine.engine.Engine;
 import org.andengine.engine.LimitedFPSEngine;
 import org.andengine.engine.camera.BoundCamera;
@@ -44,17 +42,13 @@ public class Activity extends BaseGameActivity {
         super.onCreate(savedInstanceState);
 
 
-       // btAdapter = BluetoothAdapter.getDefaultAdapter();
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
 
-       // Log.v("BT:", btAdapter.getName());
+        Log.v("BT:", btAdapter.getName());
 
     }
 
 
-
-public void connect(TGDevice tg)
-
-    {tg.connect(true);}
     @Override
     public EngineOptions onCreateEngineOptions() {
         camera = new BoundCamera(0, 0, 800, 480);

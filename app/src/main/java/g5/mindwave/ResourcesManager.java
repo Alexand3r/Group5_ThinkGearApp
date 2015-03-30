@@ -161,6 +161,15 @@ public class ResourcesManager {
     }
 
 
+    public void unloadMenuTextures()
+    {
+        menuTextureAtlas.unload();
+    }
+
+    public void loadMenuTextures()
+    {
+        menuTextureAtlas.load();
+    }
 
 
     public void unloadSplashScreen() {
@@ -168,4 +177,6 @@ public class ResourcesManager {
         splash_region = null;
     }
 
+    public void unloadGameTextures() {
+    }
 }

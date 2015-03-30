@@ -35,7 +35,6 @@ import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
 
-
 import g5.mindwave.SceneManager.SceneType;
 /**
  * Created by Andrei on 3/23/2015.
@@ -71,11 +70,12 @@ public class GameScene extends BaseScene {
 
         CreateWorld();
         //Parallax - este foarte greu sa-l rendezi
+        ThinkGear();
         loadParallax();
 
         createCar();
         SetCamera();
-        ThinkGear();
+
         createHUD();
 
 
@@ -155,9 +155,10 @@ public class GameScene extends BaseScene {
                                                          Log.v("HelloEEG", "Meditation:" +msg.arg1);
                                                          Log.v("Motor", Float.toString(rj2.getMotorSpeed()));
                                                          if(started&&msg.arg1>0)
-                                                             start();
+                                                         { start();
                                                          if(stopped)
-                                                         rj2.setMotorSpeed(msg.arg1*100);
+                                                         {rj2.setMotorSpeed(msg.arg1*100);
+                                                         }}
                                                          //  progressMeditation.setProgress(msg.arg1);
                                                          break;
                                                      case TGDevice.MSG_RAW_DATA:
@@ -188,12 +189,12 @@ public class GameScene extends BaseScene {
     public void stop()
     {
     autoParallaxBackground.stop();
-    rj2.enableMotor(false);
-        rj2.setMotorSpeed(-rj2.getJointSpeed()*50);
+        rj2.enableMotor(false);
+       // rj2.setMotorSpeed(-rj2.getJointSpeed()*50);
         rj2.setLimits(0,50);
 
         rj2.enableLimit(true);
-        rj2.setMaxMotorTorque(0);
+       // rj2.setMaxMotorTorque(0);
         stopped = false;
     }
     public void start()
@@ -202,6 +203,7 @@ public class GameScene extends BaseScene {
         autoParallaxBackground.start();
         resourcesManager.mMusic.pause();
         started = false;
+        scoreTimeHandler();
     }
 
     public void createCar()
@@ -248,7 +250,7 @@ public class GameScene extends BaseScene {
 
         final RevoluteJointDef revoluteJointDef2 = new RevoluteJointDef();
         revoluteJointDef2.initialize(wheelBody2, carBody, wheelBody2.getWorldCenter());
-        revoluteJointDef2.enableMotor = true;
+        revoluteJointDef2.enableMotor = false;
         //speed
         revoluteJointDef2.motorSpeed = 50;
         //Torque, more torque = more wheel 'burnout'
@@ -318,7 +320,7 @@ public class GameScene extends BaseScene {
         highScore.setText("High Score: 0");
         gameHUD.attachChild(highScore);
         camera.setHUD(gameHUD);
-        scoreTimeHandler();
+
     }
 
     private void updateScore() {
@@ -332,32 +334,37 @@ public class GameScene extends BaseScene {
           highScore.setText("High Score: " + highSc);
     }
 
-
     private void scoreTimeHandler() {
-        TimerHandler scoreTimerHandler;
-        float scoreUp = 1;
+         TimerHandler scoreTimerHandler;
+         float scoreUp = 1;
 
-        scoreTimerHandler = new TimerHandler(scoreUp, true, new ITimerCallback() {
-            @Override
-            public void onTimePassed(TimerHandler pTimerHandler) {
-                if(rj2.isMotorEnabled()) {
-                    updateScore();}
-            }
-        });
-        engine.registerUpdateHandler(scoreTimerHandler);
+                 scoreTimerHandler = new TimerHandler(scoreUp, true, new ITimerCallback() {
+             @Override
+             public void onTimePassed(TimerHandler pTimerHandler) {
+                 if(rj2.isMotorEnabled()) {
+                     updateScore();}
+                 }
+             });
+       engine.registerUpdateHandler(scoreTimerHandler);
 
-    }
+                 }
 
     @Override
     public void onBackKeyPressed() {
-        carSprite.setPosition(200, 100);
-        rj2.enableMotor(true);
-        score = 0;
+       /* carSprite.setPosition(200, 100);
 
-       /*GameScene gameScene;
+        ThinkGear();
+        //rj2.enableMotor(true);
+        autoParallaxBackground.stop();
+        rj2.enableLimit(false);
+        score = 0;
+        started = true;
+        stopped = true;
+       GameScene gameScene;
         gameScene = null;
         gameScene = new GameScene();
         engine.setScene(gameScene);*/
+        SceneManager.getInstance().loadMenuScene(engine);
     }
 
     @Override
@@ -368,6 +375,9 @@ public class GameScene extends BaseScene {
 
     @Override
     public void disposeScene() {
-
+        camera.setHUD(null);
+        camera.setCenter(400, 240);
+        camera.setChaseEntity(null);
+        this.detachChildren();
     }
 }
