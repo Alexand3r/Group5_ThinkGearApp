@@ -201,7 +201,7 @@ public class GameScene extends BaseScene {
     {
         rj2.enableMotor(true);
         autoParallaxBackground.start();
-        resourcesManager.mMusic.pause();
+        resourcesManager.musicEngineIdle.pause();
         started = false;
         scoreTimeHandler();
     }
@@ -218,7 +218,7 @@ public class GameScene extends BaseScene {
         carBody.setMassData(carBodyMass);
         this.attachChild(carSprite);
 
-        resourcesManager.mMusic.play();
+        resourcesManager.musicEngineIdle.play();
         //Car Wheels
 
 
