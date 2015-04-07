@@ -188,6 +188,7 @@ public class GameScene extends BaseScene {
     boolean started = true;
     public void stop()
     {
+        resourcesManager.musicEngineRev.stop();
     autoParallaxBackground.stop();
         rj2.enableMotor(false);
        // rj2.setMotorSpeed(-rj2.getJointSpeed()*50);
@@ -199,6 +200,7 @@ public class GameScene extends BaseScene {
     }
     public void start()
     {
+        resourcesManager.musicEngineRev.play();
         rj2.enableMotor(true);
         autoParallaxBackground.start();
         resourcesManager.mMusic.pause();
@@ -250,7 +252,7 @@ public class GameScene extends BaseScene {
 
         final RevoluteJointDef revoluteJointDef2 = new RevoluteJointDef();
         revoluteJointDef2.initialize(wheelBody2, carBody, wheelBody2.getWorldCenter());
-        revoluteJointDef2.enableMotor = false;
+        revoluteJointDef2.enableMotor = true;
         //speed
         revoluteJointDef2.motorSpeed = 50;
         //Torque, more torque = more wheel 'burnout'
@@ -320,6 +322,7 @@ public class GameScene extends BaseScene {
         highScore.setText("High Score: 0");
         gameHUD.attachChild(highScore);
         camera.setHUD(gameHUD);
+        scoreTimeHandler();
 
     }
 
