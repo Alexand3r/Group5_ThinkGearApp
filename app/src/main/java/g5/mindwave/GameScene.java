@@ -188,22 +188,23 @@ public class GameScene extends BaseScene {
     boolean started = true;
     public void stop()
     {
-        resourcesManager.musicEngineRev.stop();
+
     autoParallaxBackground.stop();
         rj2.enableMotor(false);
        // rj2.setMotorSpeed(-rj2.getJointSpeed()*50);
         rj2.setLimits(0,50);
-
+        resourcesManager.musicEngineRev.stop();
         rj2.enableLimit(true);
        // rj2.setMaxMotorTorque(0);
         stopped = false;
     }
     public void start()
     {
-        resourcesManager.musicEngineRev.play();
+
         rj2.enableMotor(true);
         autoParallaxBackground.start();
         resourcesManager.musicEngineIdle.pause();
+        resourcesManager.musicEngineRev.play();
         started = false;
         scoreTimeHandler();
     }
