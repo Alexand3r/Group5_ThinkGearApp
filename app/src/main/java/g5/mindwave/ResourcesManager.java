@@ -49,9 +49,9 @@ public class ResourcesManager {
     // Game Texture
     public BuildableBitmapTextureAtlas gameTextureAtlas;
     public BluetoothAdapter btAdapter;
+    public Music mMusic;
+    public Music musicEngineRev;
 
-    // Music
-    public Music musicEngineIdle;
 
 
 
@@ -147,9 +147,11 @@ public class ResourcesManager {
 
         MusicFactory.setAssetBasePath("mfx/");
         try {
-            musicEngineIdle = MusicFactory.createMusicFromAsset(engine.getMusicManager(), activity.getApplicationContext(), "idle.wav");
+            mMusic = MusicFactory.createMusicFromAsset(engine.getMusicManager(), activity.getApplicationContext(), "idle.wav");
+            musicEngineRev = MusicFactory.createMusicFromAsset(engine.getMusicManager(),activity.getApplicationContext(), "dacia.mp3");
+            musicEngineRev.setLooping(true);
 
-            musicEngineIdle.setLooping(true);
+            mMusic.setLooping(true);
         } catch (final IOException e) {
             Debug.e(e);
         }
